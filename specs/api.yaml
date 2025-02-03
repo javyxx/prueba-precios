@@ -1,0 +1,73 @@
+openapi: 3.0.0
+info:
+  title: Servicio de Consulta de Tarifas
+  description: API REST para consultar tarifas de productos por fecha y cadena.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+    description: Servidor local
+paths:
+  /tarifas:
+    get:
+      operationId: obtenerTarifas
+      summary: Consulta de tarifas
+      description: Obtiene la tarifa aplicable para un producto en una fecha dada y una cadena específica.
+      parameters:
+        - name: fechaAplicacion
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: Fecha de aplicación en formato ISO 8601.
+        - name: productoId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Identificador del producto.
+        - name: cadenaId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Identificador de la cadena.
+      responses:
+        '200':
+          description: Respuesta exitosa con la tarifa aplicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TarifasResponse'
+        '400':
+          description: Petición incorrecta debido a parámetros inválidos.
+        '404':
+          description: No se encontró una tarifa aplicable para los parámetros dados.
+        '500':
+          description: Error interno del servidor.
+components:
+  schemas:
+    TarifasResponse:
+      type: object
+      properties:
+        productoId:
+          type: integer
+          description: Identificador del producto.
+        cadenaId:
+          type: integer
+          description: Identificador de la cadena.
+        tarifaId:
+          type: integer
+          description: Identificador de la tarifa aplicada.
+        fechaInicio:
+          type: string
+          format: date-time
+          description: Fecha de inicio de la aplicación de la tarifa.
+        fechaFin:
+          type: string
+          format: date-time
+          description: Fecha de fin de la aplicación de la tarifa.
+        precioFinal:
+          type: number
+          format: float
+          description: Precio final a aplicar.
