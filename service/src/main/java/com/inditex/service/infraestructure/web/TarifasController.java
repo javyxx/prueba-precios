@@ -11,6 +11,7 @@ import com.inditex.prueba.api.TarifasApi;
 import com.inditex.prueba.model.TarifasResponse;
 import com.inditex.service.domain.model.Price;
 import com.inditex.service.domain.model.PriceRequest;
+import com.inditex.service.infraestructure.exceptions.PriceNotFound;
 import com.inditex.service.infraestructure.service.FindPriceService;
 
 import jakarta.validation.Valid;
@@ -36,9 +37,10 @@ public class TarifasController implements TarifasApi {
 			tarifasResponse.setProductoId(price.getProductId());
 			tarifasResponse.setTarifaId(price.getPriceList());
 			return ResponseEntity.ok(tarifasResponse);
+		} else {
+			throw new PriceNotFound("Precio no encontrado");
 		}
 
-		return null;
 	}
 
 }
